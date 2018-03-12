@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: d-pipe
+  labels:
+    app: d-pipe
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: d-pipe
+    tier: d-pipe
+  type: NodePort
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: d-pipe
+  labels:
+    app: d-pipe
+spec:
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: d-pipe
+        tier: d-pipe
+    spec:
+      containers:
+      - image: 127.0.0.1:30400/d-pipe:latest
+        name: d-pipe
+        ports:
+        - containerPort: 80
+          name: d-pipe
